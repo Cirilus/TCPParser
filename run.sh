@@ -7,7 +7,7 @@ sudo setcap cap_net_admin=eip ./target/release/tcp
 
 pid=$!
 
-sudo ip addr add 192.168.1.2/24 dev tcp
+sudo ip addr add 192.168.1.1/24 dev tcp
 sudo ip link set up dev tcp
 
 trap "kill $pid" INT TERM
