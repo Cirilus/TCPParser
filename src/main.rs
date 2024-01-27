@@ -1,9 +1,9 @@
-mod ip4_parser;
+mod parseres;
 mod types;
 
 use tun_tap::{Iface, Mode};
 use crate::types::{ETHER_TYPE};
-use ip4_parser::types::{IP4, IP4_TYPE};
+use parseres::types::{IP4, IP4_TYPE};
 
 fn main() {
     let iface = Iface::new("tcp", Mode::Tun).expect("Failed to create a TUN device");
