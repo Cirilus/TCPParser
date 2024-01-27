@@ -1,14 +1,16 @@
+mod ip4_parser;
 mod types;
 
-use std::u8;
 use tun_tap::{Iface, Mode};
-use crate::types::ETHER_TYPE;
+use crate::types::{ETHER_TYPE};
+use ip4_parser::types::{IP4, IP4_TYPE};
 
 fn main() {
     let iface = Iface::new("tcp", Mode::Tun).expect("Failed to create a TUN device");
 
     let mut buf = vec![0u8; 1504];
 
+    let mut count_packet = 0;
 
     loop {
         let size = iface.recv(&mut buf).unwrap();
@@ -19,30 +21,16 @@ fn main() {
             continue
         }
 
-        let (version, ihl) = {
-            let value = u8::from_be_bytes([buf[4]]);
-            (value >> 4, value & 0xf)
-        };
+        let ip4 = IP4::from_slice(&buf[4..]).expect("Error IP4 parsing");
 
-        if version != 4 {
-            panic!("Error version");
+        if IP4_TYPE["TCP"] != ip4.protocol {
+            continue
         }
 
-        if ihl < 5 {
-            panic!("Error Internet header length");
-        }
+        count_packet += 1;
 
-        let header_length = usize::from(ihl) * 4;
-        let dscp = u8::from_be_bytes([buf[5]]) >> 2;
-        let ecn = u8::from_be_bytes([buf[5]]) & 0b0000_0011;
-        let total_length = u16::from_be_bytes([buf[5], buf[6]]);
-
-        println!("size of packet {:?}, version: {:?}, ihl: {:?}, \
-        header_length: {:?}, dcp: {:?}, \
-        enc: {:?}, total_length: {:?}",
-                 size, version, ihl,
-                 header_length, dscp,
-                 ecn, total_length);
+        println!("the packet {:?} size of packet {:?}, ip4 {:?}\n",
+                 count_packet, size, ip4);
     }
 }
 
