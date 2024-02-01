@@ -12,13 +12,13 @@ impl IP4 {
             (value >> 4, value & 0xf)
         };
 
-        if version != 4 {
-            return Err(IP4Error::ErrVersion)
-        }
-
-        if ihl < 5 {
-            return Err(IP4Error::ErrorIHL)
-        }
+        // if version != 4 {
+        //     return Err(IP4Error::ErrVersion)
+        // }
+        //
+        // if ihl < 5 {
+        //     return Err(IP4Error::ErrorIHL)
+        // }
 
         let header_length = usize::from(ihl) * 4;
         let dscp = u8::from_be_bytes([slice[1]]) >> 2;

@@ -5,14 +5,14 @@ impl TCP {
     pub fn from_slice(slice: &[u8]) -> Result<TCP, TCPError>{
         let source_port = u16::from_be_bytes([slice[0], slice[1]]);
         let destination_port = u16::from_be_bytes([slice[2], slice[3]]);
-        let sequence_number = u32::from_be_bytes([slice[4], slice[4], slice[5], slice[6]]);
-        let ack_number = u32::from_be_bytes([slice[7], slice[8], slice[9], slice[10]]);
-        let data_offset = u8::from_be_bytes([slice[11]]) & 0xf0;
-        let reserved = u8::from_be_bytes([slice[11]]) & 0xf;
-        let flags = Self::parse_flags(slice[12]);
-        let window_size = u16::from_be_bytes([slice[13], slice[14]]);
-        let checksum = u16::from_be_bytes([slice[15], slice[16]]);
-        let urgent_pointer = u16::from_be_bytes([slice[17], slice[18]]);
+        let sequence_number = u32::from_be_bytes([slice[4], slice[5], slice[6], slice[7]]);
+        let ack_number = u32::from_be_bytes([slice[8], slice[9], slice[10], slice[11]]);
+        let data_offset = u8::from_be_bytes([slice[12]]) & 0xf0;
+        let reserved = u8::from_be_bytes([slice[12]]) & 0xf;
+        let flags = Self::parse_flags(slice[13]);
+        let window_size = u16::from_be_bytes([slice[14], slice[15]]);
+        let checksum = u16::from_be_bytes([slice[16], slice[17]]);
+        let urgent_pointer = u16::from_be_bytes([slice[18], slice[19]]);
 
         Ok(TCP{
             source_port,

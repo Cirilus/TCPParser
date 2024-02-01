@@ -22,7 +22,7 @@ fn main() {
         if IP4_TYPE["TCP"] != packet.ip4.protocol {
             continue
         }
-        // println!("{:#?}", packet)
+        println!("{:#?}", packet)
     }
 }
 
